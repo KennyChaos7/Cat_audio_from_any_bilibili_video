@@ -3,6 +3,7 @@ import os
 import time
 import wbi as API
 import requests
+from PIL import Image
 
 path = os.getcwd()
 if os.path.exists(path + "/output") is False:
@@ -27,8 +28,8 @@ def download(url: str, file_name: str):
         file.write(file_cache.content)
     if ".m4a" in file_name:
         print(file_name + " transcoding .... ")
-        os.system("ffmpeg -i " + path + tmp_file_name + " -acodec copy " + path + tmp_file_name[0:-4] + ".aac")
-        os.rename(path + tmp_file_name[0:-4] + ".aac", path + file_name[0:-4] + ".aac")
+        os.system("ffmpeg -i " + path + tmp_file_name + " -acodec libmp3lame -ac 2 -ab 128k -id3v2_version 3 " + path + tmp_file_name[0:-4] + ".mp3")
+        os.rename(path + tmp_file_name[0:-4] + ".mp3", path + file_name[0:-4] + ".mp3")
         # os.remove(path + tmp_file_name[0:-4] + ".m4a")
         os.rename(path + tmp_file_name[0:-4] + ".m4a", path + file_name[0:-4] + ".m4a")
     else:
@@ -48,3 +49,6 @@ def main(bv_id: str):
 
 if __name__ == '__main__':
     main('BV1WX4y1L7je')
+    # im = Image.open(path + 'test.png')
+    # im = im.convert('RGB')
+    # im.save(path + 'test.jpeg', "JPEG")
