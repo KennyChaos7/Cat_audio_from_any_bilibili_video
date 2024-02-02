@@ -35,12 +35,16 @@ def download(url: str, file_name: str):
         os.rename(path + tmp_file_name[0:-4] + ".png", path + file_name[0:-4] + ".png")
 
 
-if __name__ == '__main__':
-    video_json = API.get_video_simple_info('BV1WX4y1L7je').json()
+def main(bv_id: str):
+    video_json = API.get_video_simple_info(bv_id).json()
     if video_json['code'] == 0:
         video_url_json = API.get_video_player_url(video_json['data']['bvid'], video_json['data']['cid']).json()
         if video_url_json['code'] == 0 and str('dash') in video_url_json['data']:
             dash_data_json = json.loads(json.dumps(video_url_json['data']['dash']))
             audio_url = dash_data_json['audio'][0]['baseUrl']
-            download(url=video_json['data']['pic'], file_name=video_json['data']['title']+".png")
-            download(url=audio_url, file_name=video_json['data']['title']+".m4a")
+            download(url=video_json['data']['pic'], file_name=video_json['data']['title'] + ".png")
+            download(url=audio_url, file_name=video_json['data']['title'] + ".m4a")
+
+
+if __name__ == '__main__':
+    main('BV1WX4y1L7je')
