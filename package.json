@@ -1,0 +1,22 @@
+{
+  "name": "cat_audio_from_any_bilibili_video",
+  "version": "1.0.0",
+  "description": "just download the audio from video on bilibili",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/KennyChaos7/Cat_audio_from_any_bilibili_video.git"
+  },
+  "author": "kennychaos7",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/KennyChaos7/Cat_audio_from_any_bilibili_video/issues"
+  },
+  "homepage": "https://github.com/KennyChaos7/Cat_audio_from_any_bilibili_video#readme",
+  "devDependencies": {
+    "electron": "^32.0.2"
+  }
+}
