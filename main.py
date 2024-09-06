@@ -5,7 +5,10 @@ from tqdm import tqdm
 import wbi as API
 import requests
 from PIL import Image
+from flask import Flask, render_template
+from flask_cors import cross_origin
 
+app = Flask(__name__)
 path = os.getcwd()
 if os.path.exists(path + "/output") is False:
     os.mkdir(path + "/output")
@@ -54,7 +57,7 @@ def main(bv_id: str):
             audio_url = dash_data_json['audio'][0]['baseUrl']
             download(url=video_json['data']['pic'], file_name=video_json['data']['title'] + ".png", chunk_size=1024)
             download(url=audio_url, file_name=video_json['data']['title'] + ".m4a", chunk_size=1024 * 1024)
-            transcode(file_name=video_json['data']['title'] + ".m4a")
+            # transcode(file_name=video_json['data']['title'] + ".m4a")
 
 
 def progress_bar(start_time, max_progress, progress):
@@ -66,5 +69,12 @@ def progress_bar(start_time, max_progress, progress):
     time.sleep(0.1)
 
 
+@app.route('/')
+def homepage():
+    home = ''
+    return render_template(home)
+
+
 if __name__ == '__main__':
-    main('BV1wE4m1R7cu')
+    # main('BV1wE4m1R7cu')
+    app.run(host='127.0.0.1', port=50001, use_reloader=False)
