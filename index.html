@@ -1,18 +1,20 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns="http://www.w3.org/1999/html">
   <head>
     <meta charset="UTF-8">
     <!-- https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP -->
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'">
-    <title>Hello World!</title>
-  </head>
-  <body>
-    <h1>Hello World!</h1>
-    We are using Node.js <span id="node-version"></span>,
-    Chromium <span id="chrome-version"></span>,
-    and Electron <span id="electron-version"></span>.
+<!--    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'">-->
+    <title>下载阿b音频</title>
+<!--    <script src="event.js"></script>-->
 
-    <span id="python-result"></span>
-<!--    <script src="./renderer.js"></script>-->
+  </head>
+
+  <body>
+    <input type="text" id="input_bv" placeholder="bv号"/>
+    <button id="btn_download" >下载</button><br/>
+      <a href="http://127.0.0.1:5981/">go flask template</a><br/>
+      <a href="http://127.0.0.1:5981/process_task?bv_id=asd">go flask template22</a>
+      <p id="python_result"> null </p>
+      <script type="text/javascript" src="event.js"></script>
   </body>
 </html>

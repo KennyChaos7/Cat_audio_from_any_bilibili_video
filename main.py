@@ -5,7 +5,7 @@ from tqdm import tqdm
 import wbi as API
 import requests
 from PIL import Image
-from flask import Flask, render_template
+from flask import Flask, render_template, request
 from flask_cors import cross_origin
 
 app = Flask(__name__)
@@ -69,12 +69,21 @@ def progress_bar(start_time, max_progress, progress):
     time.sleep(0.1)
 
 
+@app.route('/process_task', methods=['GET',])
+def app_process_task():
+    bv_id = request.args.get('bv_id')
+    print(bv_id)
+
+    return bv_id
+
+
 @app.route('/')
 def homepage():
-    home = ''
-    return render_template(home)
+    if request.method == 'POST':
+        pass
+    return "<p>python success</p>"
 
 
 if __name__ == '__main__':
     # main('BV1wE4m1R7cu')
-    app.run(host='127.0.0.1', port=50001, use_reloader=False)
+    app.run(host='127.0.0.1', port=5981, use_reloader=False)
