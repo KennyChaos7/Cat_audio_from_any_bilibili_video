@@ -12,7 +12,8 @@ const createWindow = () => {
             enableRemoteModule: true
         }
     })
-    win.webContents.openDevTools()
+    //开启F12
+    // win.webContents.openDevTools()
     win.loadFile('index.html')
 }
 
