@@ -58,6 +58,7 @@ def main(bv_id: str):
             download(url=video_json['data']['pic'], file_name=video_json['data']['title'] + ".png", chunk_size=1024)
             download(url=audio_url, file_name=video_json['data']['title'] + ".m4a", chunk_size=1024 * 1024)
             # transcode(file_name=video_json['data']['title'] + ".m4a")
+            return video_json['data']['title'] + ".m4a"
 
 
 def progress_bar(start_time, max_progress, progress):
@@ -73,7 +74,7 @@ def progress_bar(start_time, max_progress, progress):
 def app_process_task():
     bv_id = request.args.get('bv_id')
     print(bv_id)
-
+    main(bv_id)
     return bv_id
 
 

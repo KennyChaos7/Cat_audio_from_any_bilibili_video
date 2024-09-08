@@ -29,13 +29,29 @@ const initFlask = () => {
     })
 }
 
+const initFlaskExe = () => {
+    let script = path.join(__dirname, 'dist', 'main', 'main.exe')
+    pyProc = require('child_process').execFile(script)
+    if (pyProc != null) {
+        console.log('flask server start success')
+    }
+}
+
+function killFlaskExe() {
+    pyProc.kill()
+    console.log('kill flask server success')
+    pyProc = null
+}
+
 app.whenReady().then(() => {
-    initFlask()
+    // initFlask()
+    initFlaskExe()
     createWindow()
     app.on('activate', () => {
         if (BrowserWindow.getAllWindows().length === 0) {
             createWindow()
-            initFlask()
+            // initFlask()
+            initFlaskExe()
         }
     })
 })
@@ -43,4 +59,5 @@ app.whenReady().then(() => {
 app.on('window-all-closed', ()=> {
     if (process.platform !== 'darwin')
         app.quit()
+    killFlaskExe()
 })

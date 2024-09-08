@@ -6,7 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "electron .",
-    "build-python": "pyinstaller -D -p ./venv/Lib/site-packages main.py"
+    "pack-app": "electron-packager . --overwrite --ignore=py$ --arch=x64"
   },
   "repository": {
     "type": "git",
@@ -20,9 +20,10 @@
   "homepage": "https://github.com/KennyChaos7/Cat_audio_from_any_bilibili_video#readme",
   "devDependencies": {
     "electron": "^32.0.2",
+    "electron-packager": "^15.4.0",
     "python-shell": "^5.0.0"
   },
   "dependencies": {
-
+    "electron-packager": "^15.4.0"
   }
 }
