@@ -1,9 +1,9 @@
-const {app, BrowserWindow} = require('electron')
+const {app, BrowserWindow, ipcMain, dialog} = require('electron')
 const path = require('node:path')
-
+let win
 const createWindow = () => {
-    const win = new BrowserWindow({
-        width: 800, height: 600,
+     win = new BrowserWindow({
+        width: 800, height: 768,
         webPreferences: {
             devTools: true,
             nodeIntegration: true,
@@ -42,6 +42,30 @@ function killFlaskExe() {
     console.log('kill flask server success')
     pyProc = null
 }
+
+let progressInterval
+ipcMain.on('startProgressbar', async(event, data) => {
+    // const INCREMENT = 0.03
+    // const INTERVAL_DELAY = 100 // ms
+    // let c = 0
+    // progressInterval = setInterval(() => {
+    //     win.setProgressBar(c)
+    //     if (c < 100)
+    //         c++
+    // }, INTERVAL_DELAY)
+})
+
+ipcMain.on('stopProgressbar', async(event, data) => {
+    // clearInterval(progressInterval)
+    const options = {
+        type: 'info',
+        buttons: ['OK'],
+        title: "下载阿b音频",
+        message: data + "下载完成，请查看output文件夹"
+    };
+    dialog.showMessageBox(win, options)
+
+})
 
 app.whenReady().then(() => {
     // initFlask()

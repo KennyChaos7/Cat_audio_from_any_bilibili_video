@@ -37,6 +37,7 @@ def download(url: str, file_name: str, chunk_size: int):
             # progress_bar(start_time, max_progress, i)
             # i = i + 1
             bar.update(size)
+        return file_name
 
 
 def transcode(file_name):
@@ -56,9 +57,8 @@ def main(bv_id: str):
             dash_data_json = json.loads(json.dumps(video_url_json['data']['dash']))
             audio_url = dash_data_json['audio'][0]['baseUrl']
             download(url=video_json['data']['pic'], file_name=video_json['data']['title'] + ".png", chunk_size=1024)
-            download(url=audio_url, file_name=video_json['data']['title'] + ".m4a", chunk_size=1024 * 1024)
+            return download(url=audio_url, file_name=video_json['data']['title'] + ".m4a", chunk_size=1024 * 1024)
             # transcode(file_name=video_json['data']['title'] + ".m4a")
-            return video_json['data']['title'] + ".m4a"
 
 
 def progress_bar(start_time, max_progress, progress):
@@ -86,5 +86,5 @@ def homepage():
 
 
 if __name__ == '__main__':
-    # main('BV1HMpie9EU5')
-    app.run(host='127.0.0.1', port=5981, use_reloader=False)
+    # main('BV1Hp4y1Y7ao')
+    app.run(host='127.0.0.1', port=5000, use_reloader=False)
