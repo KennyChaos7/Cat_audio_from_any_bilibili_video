@@ -1,5 +1,7 @@
+import io
 import json
 import os
+import sys
 import time
 from tqdm import tqdm
 import wbi as API
@@ -13,6 +15,7 @@ path = os.getcwd()
 if os.path.exists(path + "/output") is False:
     os.mkdir(path + "/output")
 path += "/output/"
+sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf8')
 
 
 def download(url: str, file_name: str, chunk_size: int):
@@ -22,6 +25,8 @@ def download(url: str, file_name: str, chunk_size: int):
         headers=API.req_headers,
         stream=True
     )
+    if resp.status_code != 200:
+        return "???"
     with open(path + file_name, 'wb') as file, tqdm(
         desc=file_name,
         total=int(resp.headers.get('content-length', 0)),
@@ -49,16 +54,27 @@ def transcode(file_name):
     os.remove(path + file_name[0:-4] + ".m4a")
 
 
-def main(bv_id: str):
-    video_json = API.get_video_simple_info(bv_id).json()
+def get_info_bv_id(bv_id: str):
+    video_json = API.get_video_simple_info(bv_id=bv_id).json()
     if video_json['code'] == 0:
-        video_url_json = API.get_video_player_url(video_json['data']['bvid'], video_json['data']['cid']).json()
+        video_url_json = API.get_video_player_url(bv_id=video_json['data']['bvid'], cid=video_json['data']['cid']).json()
         if video_url_json['code'] == 0 and str('dash') in video_url_json['data']:
             dash_data_json = json.loads(json.dumps(video_url_json['data']['dash']))
             audio_url = dash_data_json['audio'][0]['baseUrl']
             download(url=video_json['data']['pic'], file_name=video_json['data']['title'] + ".png", chunk_size=1024)
             return download(url=audio_url, file_name=video_json['data']['title'] + ".m4a", chunk_size=1024 * 1024)
             # transcode(file_name=video_json['data']['title'] + ".m4a")
+    else:
+        return "???"
+
+
+def search_by_keyword(keyword:str, page:int = 1):
+    video_list_json = json.loads(API.search_by_keyword(keyword, page))
+    if video_list_json['code'] == 0:
+        print(video_list_json['data']['result'])
+        return video_list_json['data']['result']
+    else:
+        return json.loads("{}")
 
 
 def progress_bar(start_time, max_progress, progress):
@@ -70,12 +86,19 @@ def progress_bar(start_time, max_progress, progress):
     time.sleep(0.1)
 
 
+@app.route('/search', methods=['GET',])
+def app_search():
+    keyword = request.args.get('keyword')
+    page = request.args.get('page', default=1)
+    return search_by_keyword(keyword, page)
+
+
 @app.route('/process_task', methods=['GET',])
 def app_process_task():
     bv_id = request.args.get('bv_id')
     print(bv_id)
-    main(bv_id)
-    return bv_id
+    return get_info_bv_id(bv_id)
+
 
 
 @app.route('/')
@@ -86,5 +109,5 @@ def homepage():
 
 
 if __name__ == '__main__':
-    # main('BV1Hp4y1Y7ao')
+    # get_info_bv_id('BV1Hp4y1Y7ao')
     app.run(host='127.0.0.1', port=5000, use_reloader=False)

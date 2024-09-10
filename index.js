@@ -3,7 +3,7 @@ const path = require('node:path')
 let win
 const createWindow = () => {
      win = new BrowserWindow({
-        width: 800, height: 768,
+        width: 1080, height: 768,
         webPreferences: {
             devTools: true,
             nodeIntegration: true,
@@ -13,8 +13,11 @@ const createWindow = () => {
         }
     })
     //开启F12
-    // win.webContents.openDevTools()
-    win.loadFile('index.html')
+    win.webContents.openDevTools()
+    //关闭菜单项
+    // win.setMenu(null)
+    // win.loadFile('index.html')
+    win.loadFile('search.html')
 }
 
 const initFlask = () => {
@@ -60,7 +63,7 @@ ipcMain.on('stopProgressbar', async(event, data) => {
     const options = {
         type: 'info',
         buttons: ['OK'],
-        title: "下载阿b音频",
+        title: "",
         message: data + "下载完成，请查看output文件夹"
     };
     dialog.showMessageBox(win, options)

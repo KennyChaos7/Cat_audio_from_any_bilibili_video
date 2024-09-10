@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>搜索下载阿b音源</title>
+    <style>
+        .card_parent {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+            grid-gap: 20px;
+        }
+        .content_card {
+            display: grid;
+            grid-template-rows: max-content 200px 1fr;
+            height: 400px;
+            text-align: center;
+            font-size: medium;
+            font-family: "Microsoft YaHei",serif;
+        }
+        .content_card img {
+            object-fit: cover;
+            width: 100%;
+            height: 100%;
+        }
+        .content_card p,a {
+            object-fit: cover;
+            width: 100%;
+            height: 100%;
+        }
+    </style>
+</head>
+
+<body>
+    <a href="index.html">直接输入bv号下载</a><br/>
+    <input id="input_keyword" type="text" placeholder="请输入标题或者up主或相关内容"/>
+    <button id="search_by_keyword">搜索</button>
+    <button id="search_next_page">下一页</button>
+    <br/>
+    <div class="card_parent" id="search_body">
+    </div>
+    <script type="text/javascript" src="search_event.js"></script>
+
+</body>
+</html>

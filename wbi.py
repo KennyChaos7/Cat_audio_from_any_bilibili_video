@@ -1,3 +1,4 @@
+import json
 from functools import reduce
 from hashlib import md5
 import urllib.parse
@@ -148,11 +149,16 @@ def get_user_cards(uids: str):
     return response
 
 
-def get_video_simple_info(bv_id: str):
+def get_video_simple_info(bv_id: str, av_id:int = 0):
     req_url = 'https://api.bilibili.com/x/web-interface/view'
-    req_params = {
+    if av_id != 0:
+        req_params = {
+            'avid': av_id,
+        }
+    else:
+        req_params = {
             'bvid': bv_id,
-    }
+        }
     signed_params = get_wts_w_rid(req_params)
     response = requests.get(
         url=req_url,
@@ -163,12 +169,15 @@ def get_video_simple_info(bv_id: str):
     return response
 
 
-def get_video_player_url(bv_id:str, cid: int):
+def get_video_player_url(bv_id:str, cid: int, av_id:int = 0):
     req_url = 'https://api.bilibili.com/x/player/playurl'
     req_params = dict()
-    req_params['bvid'] = bv_id
+    if av_id != 0:
+        req_params['avid'] = av_id
+    else:
+        req_params['bvid'] = bv_id
     req_params['cid'] = cid
-    req_params['qn'] = 80
+    req_params['qn'] = 64
     req_params['fnval'] = 16
     # req_params['platform'] = 'html5'
     req_params['platform'] = 'pc'
@@ -181,3 +190,29 @@ def get_video_player_url(bv_id:str, cid: int):
     )
     print(response.json())
     return response
+
+
+def search_by_keyword(keyword:str, page:int = 1):
+    req_url = "https://api.bilibili.com/x/web-interface/wbi/search/type"
+    req_params = dict()
+    req_params['search_type'] = 'video'
+    req_params['keyword'] = keyword
+    req_params['page'] = page
+    req_params['order'] = 'totalrank'
+    signed_params = get_wts_w_rid(req_params)
+    b_3 = requests.get("https://api.bilibili.com/x/frontend/finger/spi", headers=req_headers).json()['data']['b_3']
+    cookies.set("buvid3", b_3)
+    search_headers = req_headers
+    search_headers['Content-type'] = 'application/json'
+    response = requests.get(
+        url=req_url,
+        params=signed_params,
+        headers=search_headers,
+        cookies=cookies
+    )
+    print(type(response.content))
+    print(response.content.decode('utf-8'))
+    if type(response.content) == bytes:
+        return response.content.decode('utf-8')
+    else:
+        return response.content
