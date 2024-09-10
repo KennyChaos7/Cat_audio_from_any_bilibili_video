@@ -13,7 +13,7 @@ const createWindow = () => {
         }
     })
     //开启F12
-    win.webContents.openDevTools()
+    // win.webContents.openDevTools()
     //关闭菜单项
     // win.setMenu(null)
     // win.loadFile('index.html')

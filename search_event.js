@@ -46,6 +46,11 @@ function search() {
         })
 }
 document.getElementById("search_by_keyword").onclick = search;
+document.getElementById("body").onkeydown = function (event) {
+    if (event.keyCode === 13)
+        search()
+};
+
 
 function search_next_page(){
     page ++
@@ -59,5 +64,4 @@ function search_next_page(){
         })
 }
 document.getElementById("search_next_page").onclick = search_next_page;
-
 
