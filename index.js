@@ -1,6 +1,7 @@
 const {app, BrowserWindow, ipcMain, dialog} = require('electron')
+const { spawn , exec} = require('child_process')
 const path = require('node:path')
-let win
+let win, workerProcess
 const createWindow = () => {
      win = new BrowserWindow({
         width: 1080, height: 768,
@@ -8,7 +9,7 @@ const createWindow = () => {
             devTools: true,
             nodeIntegration: true,
             nodeIntegrationInWorker: true,
-            contextIsolation: false, // 注意如果没有该选项，在renderer.js 中 require is not defined
+            contextIsolation: false,
             enableRemoteModule: true
         }
     })
@@ -26,24 +27,30 @@ const initFlask = () => {
         mode: 'text',
         pythonPath: 'venv/Scripts/python'
     };
-    PythonShell.run('./main.py', option, function (err, results) {
+    PythonShell.run('./server.py', option, function (err, results) {
         if (err) throw err
         console.log('python-result', results)
     })
 }
 
-const initFlaskExe = () => {
-    let script = path.join(__dirname, 'dist', 'main', 'main.exe')
-    pyProc = require('child_process').execFile(script)
-    if (pyProc != null) {
+const initFlaskExe = async () => {
+    let script = path.join('server.exe')
+    const EXECUTION_OPTIONS = {
+        windowsHide: true,
+        detached: false // 让子进程独立于父进程运行
+    }
+    workerProcess = spawn(script, [], EXECUTION_OPTIONS)
+    if (workerProcess != null) {
         console.log('flask server start success')
     }
 }
 
 function killFlaskExe() {
-    pyProc.kill()
+    if (workerProcess.exitCode === null) {
+        workerProcess.kill()
+    }
+    exec('taskkill /im server.exe -f')
     console.log('kill flask server success')
-    pyProc = null
 }
 
 let progressInterval
@@ -83,8 +90,11 @@ app.whenReady().then(() => {
     })
 })
 
+app.on('before-quit', ()=> {
+    killFlaskExe()
+})
+
 app.on('window-all-closed', ()=> {
     if (process.platform !== 'darwin')
         app.quit()
-    killFlaskExe()
 })
