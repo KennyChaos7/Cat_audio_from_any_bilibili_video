@@ -1,20 +1,20 @@
 const {app, BrowserWindow, ipcMain, dialog} = require('electron')
-const { spawn , exec} = require('child_process')
+const { spawn , exec, execFile} = require('child_process')
 const path = require('node:path')
 let win, workerProcess
 const createWindow = () => {
      win = new BrowserWindow({
-        width: 1080, height: 768,
-        webPreferences: {
-            devTools: true,
-            nodeIntegration: true,
-            nodeIntegrationInWorker: true,
-            contextIsolation: false,
-            enableRemoteModule: true
-        }
-    })
+         width: 1080, height: 768,
+         webPreferences: {
+             devTools: true,
+             nodeIntegration: true,
+             nodeIntegrationInWorker: true,
+             contextIsolation: false,
+             enableRemoteModule: true
+         }
+     })
     //开启F12
-    // win.webContents.openDevTools()
+    win.webContents.openDevTools()
     //关闭菜单项
     // win.setMenu(null)
     // win.loadFile('index.html')
@@ -35,20 +35,25 @@ const initFlask = () => {
 
 const initFlaskExe = async () => {
     let script = path.join('server.exe')
-    const EXECUTION_OPTIONS = {
-        windowsHide: true,
-        detached: false // 让子进程独立于父进程运行
-    }
-    workerProcess = spawn(script, [], EXECUTION_OPTIONS)
+    //使用spawn会导致第二次请求出现pending问题，暂不知道为何，改为execFile
+    // const EXECUTION_OPTIONS = {
+    //     windowsHide: false,
+    //     detached: true // 让子进程独立于父进程运行
+    // }
+    // workerProcess = spawn(script, [], EXECUTION_OPTIONS)
+    // if (workerProcess != null) {
+    //     console.log('flask server start success')
+    // }
+    workerProcess = execFile(script)
     if (workerProcess != null) {
         console.log('flask server start success')
     }
 }
 
 function killFlaskExe() {
-    if (workerProcess.exitCode === null) {
-        workerProcess.kill()
-    }
+    // if (workerProcess.exitCode === null) {
+    //     workerProcess.kill()
+    // }
     exec('taskkill /im server.exe -f')
     console.log('kill flask server success')
 }

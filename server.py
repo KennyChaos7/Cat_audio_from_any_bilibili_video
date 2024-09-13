@@ -7,10 +7,11 @@ from tqdm import tqdm
 import wbi as API
 import requests
 from PIL import Image
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, make_response
 from flask_cors import cross_origin
 
 app = Flask(__name__)
+cross_origin(app)
 path = os.getcwd()
 if os.path.exists(path + "/output") is False:
     os.mkdir(path + "/output")
@@ -90,22 +91,29 @@ def progress_bar(start_time, max_progress, progress):
 def app_search():
     keyword = request.args.get('keyword')
     page = request.args.get('page', default=1)
-    return search_by_keyword(keyword, page)
+    data = search_by_keyword(keyword, page)
+    response = make_response(data, 200)
+    response.mimetype = "application/json"
+    return response
 
 
 @app.route('/process_task', methods=['GET',])
 def app_process_task():
     bv_id = request.args.get('bv_id')
     print(bv_id)
-    return get_info_bv_id(bv_id)
-
+    response = make_response(get_info_bv_id(bv_id), 200)
+    response.mimetype = "application/text"
+    return response
 
 
 @app.route('/')
 def homepage():
     if request.method == 'POST':
         pass
-    return "<p>python success</p>"
+    response = make_response( "<p>python success</p>", 200)
+    response.mimetype = "application/text"
+    return response
+
 
 
 if __name__ == '__main__':

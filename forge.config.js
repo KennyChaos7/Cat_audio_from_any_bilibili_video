@@ -4,17 +4,7 @@ const { FuseV1Options, FuseVersion } = require('@electron/fuses');
 module.exports = {
   packagerConfig: {
     name: "毛阿b音频",
-    asar: true,
-    icon: 'fallout.ico',
-    // extraResources: [
-    //   {
-    //     "from": "pyexe",
-    //     "to": "./pyexe",
-    //     "filter": [
-    //       "**/*"
-    //     ]
-    //   }
-    // ]
+    asar: true
   },
   rebuildConfig: {},
   makers: [

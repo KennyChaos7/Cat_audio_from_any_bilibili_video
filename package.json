@@ -7,7 +7,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "electron-forge start",
     "pack-app": "@electron-packager . --overwrite --ignore=py$ --arch=x64 --download.mirrorOptions.mirror=https://npmmirror.com/mirrors/electron/",
-    "build-python": "pyinstaller -F -p ./venv/Lib/site-packages server.py",
+    "build-python": "pyinstaller -F -p ./venv/Lib/site-packages -i icon/fallout4.ico server.py",
     "package": "electron-forge package",
     "make": "electron-forge make"
   },
