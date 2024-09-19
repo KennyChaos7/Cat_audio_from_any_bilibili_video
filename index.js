@@ -34,20 +34,23 @@ const initFlask = () => {
 }
 
 const initFlaskExe = async () => {
-    let script = path.join('server.exe')
-    //使用spawn会导致第二次请求出现pending问题，暂不知道为何，改为execFile
-    // const EXECUTION_OPTIONS = {
-    //     windowsHide: false,
-    //     detached: true // 让子进程独立于父进程运行
-    // }
-    // workerProcess = spawn(script, [], EXECUTION_OPTIONS)
-    // if (workerProcess != null) {
-    //     console.log('flask server start success')
-    // }
-    workerProcess = execFile(script)
-    if (workerProcess != null) {
-        console.log('flask server start success')
-    }
+    killFlaskExe()
+    setTimeout(function () {
+        let script = path.join('server.exe')
+        //使用spawn会导致第二次请求出现pending问题，暂不知道为何，改为execFile
+        // const EXECUTION_OPTIONS = {
+        //     windowsHide: false,
+        //     detached: true // 让子进程独立于父进程运行
+        // }
+        // workerProcess = spawn(script, [], EXECUTION_OPTIONS)
+        // if (workerProcess != null) {
+        //     console.log('flask server start success')
+        // }
+        workerProcess = execFile(script)
+        if (workerProcess != null) {
+            console.log('flask server start success')
+        }
+    }, 3000)
 }
 
 function killFlaskExe() {
