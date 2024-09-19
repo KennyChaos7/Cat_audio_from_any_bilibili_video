@@ -110,9 +110,10 @@ def app_process_task():
 def homepage():
     if request.method == 'POST':
         pass
-    response = make_response( "<p>python success</p>", 200)
-    response.mimetype = "application/text"
-    return response
+    # response = make_response( "<p>python success</p>", 200)
+    # response.mimetype = "application/text"
+    # return response
+    return "<p>python success</p>"
 
 
 

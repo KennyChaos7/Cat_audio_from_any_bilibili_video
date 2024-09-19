@@ -14,7 +14,7 @@ const createWindow = () => {
          }
      })
     //开启F12
-    win.webContents.openDevTools()
+    // win.webContents.openDevTools()
     //关闭菜单项
     // win.setMenu(null)
     // win.loadFile('index.html')
@@ -78,8 +78,7 @@ ipcMain.on('stopProgressbar', async(event, data) => {
         title: "",
         message: data + "下载完成，请查看output文件夹"
     };
-    dialog.showMessageBox(win, options)
-
+    await dialog.showMessageBox(win, options)
 })
 
 app.whenReady().then(() => {

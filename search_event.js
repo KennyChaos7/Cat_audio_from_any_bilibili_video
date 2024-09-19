@@ -1,5 +1,4 @@
 const {ipcRenderer} = require('electron')
-const timers = require("timers");
 
 let search_last_time_url;
 let page = 1;
@@ -15,13 +14,30 @@ function add_data_to_div(json_array) {
         let image = new Image(200, 100)
         image.src = "https://" + json['pic']
         image.alt = json['title']
+        image.title = json['bvid']
         let p = document.createElement('p')
+        p.className = "title"
+        p.title = json['title']
         p.innerText = json['title']
-        // let footer = document.createElement('footer')
-        // footer.innerText = json['author']
-        // div.appendChild(footer)
+        let footer = document.createElement('a')
+        footer.innerText = "下载"
+        footer.className = "footer"
+        footer.onclick = function () {
+            footer.innerText = "下载中"
+            ipcRenderer.send("startProgressbar", "")
+            let url = "http://127.0.0.1:5000/process_task?bv_id=" + json['bvid']
+            fetch(url)
+                .then((data) => {
+                    return data.text()
+                })
+                .then((text) => {
+                    ipcRenderer.send("stopProgressbar", text)
+                    footer.innerText = "下载完成"
+                })
+        }
         div.appendChild(p)
         div.appendChild(image)
+        div.appendChild(footer)
         body.appendChild(div)
     }
 }
@@ -79,3 +95,35 @@ function search_next_page() {
 }
 document.getElementById("search_next_page").onclick = search_next_page;
 
+
+// function test_add_card() {
+//     let body = document.getElementById('search_body')
+//     let div = document.createElement('div')
+//     div.className = 'content_card'
+//     let image = new Image(200, 100)
+//     image.alt = "img"
+//     image.title = "bvid"
+//     let p = document.createElement('p')
+//     p.className = "title"
+//     p.innerText = "title"
+//     let footer = document.createElement('p')
+//     footer.innerText = "download"
+//     footer.className = "footer"
+//     footer.onclick = function () {
+//         ipcRenderer.send("startProgressbar", "")
+//         let url = "http://127.0.0.1:5000/process_task?bv_id=" + "BV1AE4m1d7XT"
+//         fetch(url)
+//             .then((data) => {
+//                 return data.text()
+//             })
+//             .then((text) => {
+//                 ipcRenderer.send("stopProgressbar", text)
+//                 footer.innerText = "download finish"
+//             })
+//     }
+//     div.appendChild(p)
+//     div.appendChild(image)
+//     div.appendChild(footer)
+//     body.appendChild(div)
+// }
+// document.getElementById('test_add_card').onclick = test_add_card
