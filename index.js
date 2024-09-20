@@ -74,12 +74,19 @@ ipcMain.on('startProgressbar', async(event, data) => {
 })
 
 ipcMain.on('stopProgressbar', async(event, data) => {
+    let msg = ""
     // clearInterval(progressInterval)
+    if (data.toLowerCase().indexOf("Internal Server Error".toLowerCase()) !== -1) {
+        msg = "下载异常"
+    }
+    else {
+        msg =  data + "下载完成，请查看output文件夹"
+    }
     const options = {
         type: 'info',
         buttons: ['OK'],
         title: "",
-        message: data + "下载完成，请查看output文件夹"
+        message: msg
     };
     await dialog.showMessageBox(win, options)
 })
